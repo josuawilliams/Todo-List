@@ -83,7 +83,6 @@ export default function Update() {
                     </div><br />
 
                     <select className="form-select" name="status" onChange={handleChange} value={input.status} aria-label="Default select example">
-                        <option selected>Open this select menu</option>
                         {input.status === "Complete" && <option selected value="Complete">Complete</option>}  
                         {input.status === "UnComplete" && <option selected value="UnComplete">UnComplete</option>}  
                         
