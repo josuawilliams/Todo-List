@@ -1,20 +1,11 @@
 import { Link } from "react-router-dom"
-import { BASE_URL } from "../action/url"
+import { useDispatch, useSelector } from "react-redux"
+import { DeleteTodo } from "../store/actionFetch/TodoFetch"
 export default function Table({ todos }) {
+    const dispatch = useDispatch()
+    
     const handleDelete = (id) => {
-        fetch(BASE_URL + `${id}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            window.location.reload()
-        })
-        .catch(err => {
-                console.log(err);
-        })
+       dispatch(DeleteTodo(id))
     }
     return (
         <>

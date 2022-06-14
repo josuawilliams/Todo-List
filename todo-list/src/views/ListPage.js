@@ -2,25 +2,23 @@ import { useEffect, useState } from 'react';
 import { BASE_URL } from '../action/url';
 import Table from '../component/table';
 import Swal from 'sweetalert2'
+import { GetTodoList, dataTodo } from '../store/actionFetch/TodoFetch';
+import {useDispatch, useSelector} from "react-redux"
 
 export default function ListPage() {
+    const dispatch = useDispatch()
     const [input, setInputTodo] = useState(
         {
             title: '',
         }
     );
-    const [todos, setTodos] = useState([]);
+    const todos = useSelector((state)=> state.todo)
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        fetch(BASE_URL, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
+            dispatch(GetTodoList())
             .then(response => response.json())
             .then(data => {
-                setTodos(data)
+                dispatch(dataTodo(data))
             }).catch((error) => {
                 console.log(error)
             })
@@ -32,7 +30,6 @@ export default function ListPage() {
     if (isLoading) {
         return <div className='loading'><div className="loader"></div></div>
     }
-
     const handleChange = (event) => {
         const { name, value } = event.target
         setInputTodo({
@@ -64,7 +61,11 @@ export default function ListPage() {
                         `${data.message}`,
                         'success'
                     )
-                    setTodos([...todos, data.data])
+                    dispatch(GetTodoList())
+                    .then(response => response.json())
+                    .then(data => {
+                        dispatch(dataTodo(data))
+                    })
                 }
             })
             .catch((error) => {
